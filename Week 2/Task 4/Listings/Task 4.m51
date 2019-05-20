@@ -1,0 +1,394 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/27/2018  21:45:47  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\Task 4.obj TO .\Objects\Task 4 PRINT (.\Listings\Task 4.m51)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\Task 4.obj (TASK_4)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPDIV)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FCAST)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CASTF)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (POW)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CHKFLOAT)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPADD)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPCMP)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPNEG)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (EXP)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (LOG)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPSERIES)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SIDIV)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LNEG)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LLDCODE)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LLDCODE0)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+
+
+LINK MAP OF MODULE:  .\Objects\Task 4 (TASK_4)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000AH     UNIT         ?DT?_POW?POW
+            DATA    0012H     0008H     UNIT         ?DT?TASK_4
+            DATA    001AH     0004H     UNIT         ?DT?LOG?LOG
+            DATA    001EH     0002H     UNIT         ?DT?_SEE?TASK_4
+            BIT     0020H.0   0000H.1   UNIT         ?BI?TASK_4
+            BIT     0020H.1   0000H.1   UNIT         ?BI?LOG?LOG
+                    0020H.2   0000H.6                *** GAP ***
+            DATA    0021H     0002H     UNIT         _DATA_GROUP_
+            IDATA   0023H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     0507H     UNIT         ?C?LIB_CODE
+            CODE    0515H     0135H     UNIT         ?PR?LOG?LOG
+            CODE    064AH     0117H     UNIT         ?PR?_POW?POW
+            CODE    0761H     009DH     UNIT         ?PR?KEY?TASK_4
+            CODE    07FEH     009AH     UNIT         ?PR?EXP?EXP
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/27/2018  21:45:47  PAGE 2
+
+
+            CODE    0898H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0924H     007AH     UNIT         ?PR?_DISPLAY?TASK_4
+            CODE    099EH     0070H     UNIT         ?PR?MAIN?TASK_4
+            CODE    0A0EH     0051H     UNIT         ?PR?_WE?TASK_4
+            CODE    0A5FH     004EH     UNIT         ?PR?_SEE?TASK_4
+            CODE    0AADH     003BH     UNIT         ?PR?EXIT?TASK_4
+            CODE    0AE8H     0015H     UNIT         ?PR?_DELAY?TASK_4
+            CODE    0AFDH     0010H     UNIT         ?PR?TIMER0?TASK_4
+            CODE    0B0DH     0010H     UNIT         ?CO?TASK_4
+            CODE    0B1DH     000FH     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\Task 4 (TASK_4)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?PR?EXIT?TASK_4                -----    -----
+  +--> ?PR?_DISPLAY?TASK_4
+
+?PR?_DISPLAY?TASK_4            0021H    0001H
+  +--> ?PR?_WE?TASK_4
+  +--> ?CO?TASK_4
+  +--> ?PR?_DELAY?TASK_4
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?TASK_4
+  +--> ?C_INITSEG
+
+?PR?MAIN?TASK_4                -----    -----
+  +--> ?PR?TIMER0?TASK_4
+  +--> ?PR?_WE?TASK_4
+  +--> ?CO?TASK_4
+  +--> ?PR?KEY?TASK_4
+
+?PR?KEY?TASK_4                 0022H    0001H
+  +--> ?PR?_DELAY?TASK_4
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\Task 4 (TASK_4)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        TASK_4
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/27/2018  21:45:47  PAGE 3
+
+
+  C:0AF2H         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  D:0012H         SYMBOL        keynum
+  C:099EH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:0AADH         PUBLIC        exit
+  C:0A5FH         PUBLIC        _see
+  B:00A8H.1       PUBLIC        ET0
+  C:0761H         PUBLIC        key
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  C:0AFDH         PUBLIC        timer0
+  B:0088H.4       PUBLIC        TR0
+  C:0B0DH         PUBLIC        du
+  C:0A0EH         PUBLIC        _we
+  B:00A0H.2       PUBLIC        LSA
+  B:00A0H.3       PUBLIC        LSB
+  B:00A0H.4       PUBLIC        LSC
+  D:0014H         SYMBOL        h
+  D:00C8H         PUBLIC        T2CON
+  D:0016H         SYMBOL        i
+  D:0018H         SYMBOL        t
+  B:0020H.0       SYMBOL        z
+  C:0924H         PUBLIC        _display
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          L?0059
+  -------         ENDPROC       L?0059
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        i
+  C:0AF2H         LINE#         20
+  C:0AF2H         LINE#         21
+  C:0AF2H         LINE#         22
+  C:0AFCH         LINE#         23
+  -------         ENDPROC       _DELAY
+  -------         PROC          _WE
+  D:0007H         SYMBOL        i
+  C:0A0EH         LINE#         25
+  C:0A0EH         LINE#         26
+  C:0A0EH         LINE#         27
+  C:0A33H         LINE#         28
+  C:0A33H         LINE#         29
+  C:0A37H         LINE#         30
+  C:0A3EH         LINE#         31
+  C:0A42H         LINE#         32
+  C:0A49H         LINE#         33
+  C:0A4DH         LINE#         34
+  C:0A54H         LINE#         35
+  C:0A58H         LINE#         36
+  C:0A5EH         LINE#         37
+  C:0A5EH         LINE#         38
+  -------         ENDPROC       _WE
+  -------         PROC          _SEE
+  D:001EH         SYMBOL        i
+  D:0005H         SYMBOL        j
+  C:0A5FH         LINE#         40
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/27/2018  21:45:47  PAGE 4
+
+
+  C:0A63H         LINE#         41
+  C:0A63H         LINE#         42
+  C:0A68H         LINE#         43
+  C:0AA3H         LINE#         44
+  C:0AACH         LINE#         46
+  -------         ENDPROC       _SEE
+  -------         PROC          _DISPLAY
+  D:0002H         SYMBOL        i
+  -------         DO            
+  D:0021H         SYMBOL        k
+  -------         ENDDO         
+  C:0924H         LINE#         48
+  C:0928H         LINE#         49
+  C:0928H         LINE#         50
+  C:0933H         LINE#         51
+  C:0933H         LINE#         52
+  C:0938H         LINE#         53
+  C:0946H         LINE#         56
+  C:0946H         LINE#         57
+  C:095BH         LINE#         58
+  C:095BH         LINE#         59
+  C:095EH         LINE#         60
+  C:095EH         LINE#         61
+  C:095EH         LINE#         62
+  C:0963H         LINE#         63
+  C:0976H         LINE#         64
+  C:0979H         LINE#         65
+  C:097CH         LINE#         66
+  C:0981H         LINE#         67
+  C:0994H         LINE#         68
+  C:0997H         LINE#         69
+  C:099AH         LINE#         70
+  C:099DH         LINE#         71
+  C:099DH         LINE#         72
+  C:099DH         LINE#         74
+  -------         ENDPROC       _DISPLAY
+  -------         PROC          TIMER0
+  C:0AFDH         LINE#         75
+  C:0AFDH         LINE#         76
+  C:0AFDH         LINE#         77
+  C:0B00H         LINE#         78
+  C:0B03H         LINE#         79
+  C:0B06H         LINE#         80
+  C:0B08H         LINE#         81
+  C:0B0AH         LINE#         82
+  C:0B0CH         LINE#         83
+  -------         ENDPROC       TIMER0
+  -------         PROC          KEY
+  -------         DO            
+  D:0022H         SYMBOL        a
+  -------         ENDDO         
+  C:0761H         LINE#         86
+  C:0761H         LINE#         87
+  C:0761H         LINE#         89
+  C:0764H         LINE#         90
+  C:0767H         LINE#         91
+  C:0770H         LINE#         92
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/27/2018  21:45:47  PAGE 5
+
+
+  C:0770H         LINE#         93
+  C:0777H         LINE#         94
+  C:0780H         LINE#         95
+  C:0780H         LINE#         97
+  C:0783H         LINE#         98
+  C:0795H         LINE#         99
+  C:0795H         LINE#         100
+  C:079CH         LINE#         101
+  C:07A4H         LINE#         102
+  C:07ACH         LINE#         103
+  C:07B2H         LINE#         104
+  C:07B2H         LINE#         106
+  C:07B5H         LINE#         107
+  C:07C8H         LINE#         108
+  C:07C8H         LINE#         109
+  C:07D0H         LINE#         110
+  C:07D4H         LINE#         111
+  C:07D8H         LINE#         112
+  C:07E3H         LINE#         113
+  C:07E3H         LINE#         114
+  C:07F2H         LINE#         115
+  C:07F2H         LINE#         116
+  C:07F9H         LINE#         117
+  C:07FBH         LINE#         118
+  C:07FDH         LINE#         119
+  C:07FDH         LINE#         120
+  C:07FDH         LINE#         121
+  -------         ENDPROC       KEY
+  -------         PROC          MAIN
+  -------         DO            
+  C:09A1H         SYMBOL        E
+  -------         ENDDO         
+  C:099EH         LINE#         128
+  C:099EH         LINE#         129
+  C:099EH         LINE#         130
+  C:09A1H         LINE#         131
+  C:09A1H         LINE#         132
+  C:09A7H         LINE#         133
+  C:09ACH         LINE#         134
+  C:09B0H         LINE#         135
+  C:09B7H         LINE#         136
+  C:09B7H         LINE#         137
+  C:09B7H         LINE#         138
+  C:09BAH         LINE#         139
+  C:09C0H         LINE#         140
+  C:09C0H         LINE#         141
+  C:09C5H         LINE#         142
+  C:09CDH         LINE#         143
+  C:09D7H         LINE#         145
+  C:09DDH         LINE#         146
+  C:09DDH         LINE#         147
+  C:09E5H         LINE#         148
+  C:09E5H         LINE#         149
+  C:09EAH         LINE#         150
+  C:09F0H         LINE#         151
+  C:09FAH         LINE#         153
+  C:09FFH         LINE#         154
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/27/2018  21:45:47  PAGE 6
+
+
+  C:09FFH         LINE#         155
+  C:0A07H         LINE#         156
+  C:0A07H         LINE#         157
+  C:0A0CH         LINE#         158
+  -------         ENDPROC       MAIN
+  -------         PROC          EXIT
+  C:0AADH         LINE#         162
+  C:0AC8H         LINE#         166
+  C:0ACFH         LINE#         168
+  -------         ENDPROC       EXIT
+  -------         ENDMOD        TASK_4
+
+  -------         MODULE        ?C?FPDIV
+  C:0011H         PUBLIC        ?C?FPDIV
+  -------         ENDMOD        ?C?FPDIV
+
+  -------         MODULE        ?C?FCAST
+  C:00B8H         PUBLIC        ?C?FCASTC
+  C:00B3H         PUBLIC        ?C?FCASTI
+  C:00AEH         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:00ECH         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        POW
+  D:0008H         PUBLIC        ?_pow?BYTE
+  C:064AH         PUBLIC        _pow
+  -------         ENDMOD        POW
+
+  -------         MODULE        ?C?CHKFLOAT
+  C:016DH         PUBLIC        ?C?CHKFLOAT
+  -------         ENDMOD        ?C?CHKFLOAT
+
+  -------         MODULE        ?C?FPADD
+  C:018EH         PUBLIC        ?C?FPADD
+  C:018AH         PUBLIC        ?C?FPSUB
+  -------         ENDMOD        ?C?FPADD
+
+  -------         MODULE        ?C?FPMUL
+  C:027FH         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FPCMP
+  C:0387H         PUBLIC        ?C?FPCMP
+  C:0385H         PUBLIC        ?C?FPCMP3
+  -------         ENDMOD        ?C?FPCMP
+
+  -------         MODULE        ?C?FPNEG
+  C:03FEH         PUBLIC        ?C?FPNEG
+  -------         ENDMOD        ?C?FPNEG
+
+  -------         MODULE        EXP
+  C:0836H         PUBLIC        _EXP
+  -------         ENDMOD        EXP
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/27/2018  21:45:47  PAGE 7
+
+
+  -------         MODULE        LOG
+  C:0549H         PUBLIC        _LOG
+  C:0545H         PUBLIC        _LOG10
+  -------         ENDMOD        LOG
+
+  -------         MODULE        ?C?SIDIV
+  C:045CH         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?LNEG
+  C:0492H         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?LLDCODE
+  C:04A0H         PUBLIC        ?C?LLDCODE
+  -------         ENDMOD        ?C?LLDCODE
+
+  -------         MODULE        ?C?LLDCODE0
+  C:04B0H         PUBLIC        ?C?LLDCODE0
+  -------         ENDMOD        ?C?LLDCODE0
+
+  -------         MODULE        ?C?UIDIV
+  C:04C0H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SEE?TASK_4
+
+Program Size: data=35.2 xdata=0 code=2852
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

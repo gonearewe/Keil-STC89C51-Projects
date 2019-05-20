@@ -1,0 +1,200 @@
+C51 COMPILER V9.54   TASK_4                                                                11/27/2018 21:45:47 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE TASK_4
+OBJECT MODULE PLACED IN .\Objects\Task 4.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Task 4.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Ta
+                    -sk 4.lst) TABS(2) OBJECT(.\Objects\Task 4.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<math.h>
+   3          typedef unsigned int ui;
+   4          typedef unsigned char uc;
+   5          sbit led0=P2^0;
+   6          sbit led1=P2^1;
+   7          sbit led2=P2^2;
+   8          sbit led3=P2^3;
+   9          sbit led4=P2^4;
+  10          sbit led5=P2^5;
+  11          sbit led6=P2^6;
+  12          sbit led7=P2^7;
+  13          sbit LSA=P2^2;
+  14          sbit LSB=P2^3;
+  15          sbit LSC=P2^4;
+  16          
+  17            char code du[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+  18                                                 0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71};
+  19          
+  20           void delay(unsigned int i)   //i=1 10us
+  21          {
+  22   1        while(i--);
+  23   1      }
+  24          
+  25          void we(char i)   //??0~7
+  26          {
+  27   1        switch(i)
+  28   1        {
+  29   2          case 0:LSA=0,LSB=0,LSC=0;break;
+  30   2          case 1:LSA=1,LSB=0,LSC=0;break;
+  31   2          case 2:LSA=0,LSB=1,LSC=0;break;
+  32   2          case 3:LSA=1,LSB=1,LSC=0;break;
+  33   2          case 4:LSA=0,LSB=0,LSC=1;break;
+  34   2          case 5:LSA=1,LSB=0,LSC=1;break;
+  35   2          case 6:LSA=0,LSB=1,LSC=1;break;
+  36   2          case 7:LSA=1,LSB=1,LSC=1;
+  37   2        }
+  38   1      }
+  39          
+  40          void see(int i,char j)
+  41          {
+  42   1           we(j);
+  43   1            i=i/pow(10,j);
+  44   1           P0=i%10;
+  45   1        
+  46   1      }
+  47          static bit z=0;
+  48          void display(int i)
+  49          {
+  50   1        if(i<=9)
+  51   1        {
+  52   2          we(0);
+  53   2          P0=du[i];
+  54   2      
+C51 COMPILER V9.54   TASK_4                                                                11/27/2018 21:45:47 PAGE 2   
+
+  55   2          
+  56   2        }
+  57   1        if(i>9&&i<21)
+  58   1        {
+  59   2          char k=30;
+  60   2          while(k)
+  61   2          {
+  62   3           we(0);
+  63   3          P0=du[i%10];
+  64   3          delay(100);
+  65   3          P0=0;
+  66   3          we(1);
+  67   3          P0=du[i/10];
+  68   3          delay(100);
+  69   3          P0=0;
+  70   3            k--;
+  71   3          }
+  72   2        }
+  73   1          
+  74   1      }
+  75          void timer0()    
+  76          {
+  77   1        TMOD=0X01;
+  78   1        TH0=0XFC;
+  79   1        TL0=0X18;      // 1ms
+  80   1        ET0=1;
+  81   1        EA=1;
+  82   1        TR0=1;  
+  83   1      }
+  84          
+  85          static int keynum ;
+  86          void key()
+  87          {
+  88   1      
+  89   1        char a=0;
+  90   1        P1=0x0f;
+  91   1        if(P1!=0x0f)//读取按键是否按下
+  92   1        {
+  93   2          delay(1000);//延时10ms进行消抖
+  94   2          if(P1!=0x0f)//再次检测键盘是否按下
+  95   2          { 
+  96   3            //测试列
+  97   3            P1=0X0F;
+  98   3            switch(P1)
+  99   3            {
+ 100   4              case(0X07): keynum=0;break;
+ 101   4              case(0X0b): keynum=1;break;
+ 102   4              case(0X0d): keynum=2;break;
+ 103   4              case(0X0e): keynum=3;break;
+ 104   4            }
+ 105   3            //测试行
+ 106   3            P1=0XF0;
+ 107   3            switch(P1)
+ 108   3            {
+ 109   4              case(0X70): keynum=keynum;break;
+ 110   4              case(0Xb0): keynum=keynum+4;break;
+ 111   4              case(0Xd0): keynum=keynum+8;break;
+ 112   4              case(0Xe0): keynum=keynum+12;break;
+ 113   4            }
+ 114   3            while((a<50)&&(P1!=0xf0))  //检测按键松手检测
+ 115   3            {
+ 116   4              delay(1000);
+C51 COMPILER V9.54   TASK_4                                                                11/27/2018 21:45:47 PAGE 3   
+
+ 117   4              a++;
+ 118   4            }
+ 119   3          }
+ 120   2        }
+ 121   1      }
+ 122          
+ 123          
+ 124          
+ 125          static i=0,t=0,h=0;      //static   
+ 126          //main function
+ 127          
+ 128          void main()
+ 129          {
+ 130   1        timer0();
+ 131   1        E:;
+ 132   1        keynum=9;
+ 133   1        t=0;
+ 134   1        we(0);
+ 135   1        P0=du[0];
+ 136   1        while(1)
+ 137   1        {
+ 138   2        key();
+ 139   2          if(keynum==0) 
+ 140   2          {
+ 141   3            keynum=9;
+ 142   3            if(t!=20)
+ 143   3              t++;
+ 144   3            else
+ 145   3              t=20;
+ 146   3          }
+ 147   2          if(keynum==1)
+ 148   2          {
+ 149   3            keynum=9;
+ 150   3             if(t!=0)
+ 151   3              t--;
+ 152   3             else
+ 153   3              t=0;
+ 154   3           }
+ 155   2          if(keynum==2) 
+ 156   2          {
+ 157   3            keynum=9;
+ 158   3            goto E;
+ 159   3          }
+ 160   2         }
+ 161   1       }
+ 162             void exit() interrupt 1
+ 163             { 
+ 164   1        
+ 165   1        
+ 166   1             display(t);
+ 167   1           
+ 168   1         }
+ 169            
+ 170            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    646    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       4
+C51 COMPILER V9.54   TASK_4                                                                11/27/2018 21:45:47 PAGE 4   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

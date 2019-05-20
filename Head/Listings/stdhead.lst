@@ -1,0 +1,137 @@
+C51 COMPILER V9.54   STDHEAD                                                               12/19/2018 23:27:17 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE STDHEAD
+OBJECT MODULE PLACED IN .\Objects\stdhead.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE stdhead.c OPTIMIZE(8,SPEED) DEBUG OBJECTEXTEND PRINT(.\Listings\stdhead.
+                    -lst) TABS(2) OBJECT(.\Objects\stdhead.obj)
+
+line level    source
+
+   1          #include"stdhead.h"
+*** WARNING C323 IN LINE 1 OF stdhead.h: newline expected, extra characters found
+   2           void delay(unsigned int i)   //i=1 10us
+   3          {
+   4   1        while(i--);
+   5   1      }
+   6          
+   7          
+   8          void we(char i)   //0~7
+   9          {
+  10   1        switch(i)
+  11   1        {
+  12   2          case 0:LSA=0,LSB=0,LSC=0;break;
+  13   2          case 1:LSA=1,LSB=0,LSC=0;break;
+  14   2          case 2:LSA=0,LSB=1,LSC=0;break;
+  15   2          case 3:LSA=1,LSB=1,LSC=0;break;
+  16   2          case 4:LSA=0,LSB=0,LSC=1;break;
+  17   2          case 5:LSA=1,LSB=0,LSC=1;break;
+  18   2          case 6:LSA=0,LSB=1,LSC=1;break;
+  19   2          case 7:LSA=1,LSB=1,LSC=1;
+  20   2        }
+  21   1      }
+  22          ui th1,tl1,th0,tl0;
+  23          void timer0(ui t)    //      t  ms
+  24          {
+  25   1        TMOD=0X01;
+  26   1        th0=(65536-1000*t)/256;
+  27   1        tl0=(65536-1000*t)%256;
+  28   1        TH0=th0;
+  29   1        TL0=tl0;
+  30   1        ET0=1;
+  31   1        EA=1;
+  32   1        TR0=1;  
+  33   1      }
+  34          
+  35          void timer1(ui t)      //  t    ms
+  36          {
+  37   1         TMOD=0X01;
+  38   1        th1=(65536-1000*t)/256;
+  39   1        tl1=(65536-1000*t)%256;
+  40   1        TH1=th1;
+  41   1        TL1=tl1;
+  42   1        ET0=1;
+  43   1        EA=1;
+  44   1        TR0=1;  
+  45   1      }
+  46          
+  47          void uart ()      //4800
+  48          {
+  49   1         TMOD=0x20;
+  50   1        PCON=0X80;      
+  51   1        TH1=0XF3;     
+  52   1        TL1=0XF3;
+  53   1         TR1=1;
+C51 COMPILER V9.54   STDHEAD                                                               12/19/2018 23:27:17 PAGE 2   
+
+  54   1         SCON=0x50;
+  55   1         EA=1;
+  56   1         ES=1;
+  57   1      }
+  58          void display(uc j,ui t)     // j   we,  t    num
+  59          {
+  60   1        char n[8],i,m=1;
+  61   1        for(i=0;i<j;i++)
+  62   1        {
+  63   2          n[i]=t%10;
+  64   2          t=t/10;
+  65   2        }
+  66   1        for(i=j;i>0;i--)
+  67   1        { 
+  68   2          if(n[i]==0)   n[i]=16;
+  69   2          if( n[i-1]!=0)   break;
+  70   2        }
+  71   1        for(i=j-1;i>=0;i--)
+  72   1        {
+  73   2           P0=0;
+  74   2          we(i);
+  75   2          m=n[i];
+  76   2          P0=du[m];
+  77   2          delay(100);
+  78   2          }
+  79   1      }
+  80          
+  81             uc keynum=-1;
+*** ERROR C279 IN LINE 81 OF stdhead.c: 'keynum': multiple initialization
+  82          int key()       //key()
+  83          {
+  84   1        char a=0;
+  85   1        P1=0x0f;
+  86   1        if(P1!=0x0f)
+  87   1        {
+  88   2          delay(1000);
+  89   2          if(P1!=0x0f)
+  90   2          { 
+  91   3            P1=0X0F;
+  92   3            switch(P1)
+  93   3            {
+  94   4              case(0X07): keynum=0;break;
+  95   4              case(0X0b): keynum=1;break;
+  96   4              case(0X0d): keynum=2;break;
+  97   4              case(0X0e): keynum=3;break;
+  98   4            }
+  99   3            
+ 100   3            P1=0XF0;
+ 101   3            switch(P1)
+ 102   3            {
+ 103   4              case(0X70):  keynum=keynum;break;
+ 104   4              case(0Xb0): keynum=keynum+4;break;
+ 105   4              case(0Xd0):  keynum=keynum+8;break;
+ 106   4              case(0Xe0): keynum=keynum+12;break;
+ 107   4            }
+ 108   3            while((a<50)&&(P1!=0xf0))  
+ 109   3            {
+ 110   4              delay(1000);
+ 111   4              a++;
+ 112   4            } 
+ 113   3            return keynum;
+ 114   3             
+C51 COMPILER V9.54   STDHEAD                                                               12/19/2018 23:27:17 PAGE 3   
+
+ 115   3          }
+ 116   2          else return -1;
+ 117   2        }
+ 118   1          else return -1;
+ 119   1          }
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  1 ERROR(S)

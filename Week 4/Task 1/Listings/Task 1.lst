@@ -1,0 +1,101 @@
+C51 COMPILER V9.54   TASK_1                                                                12/17/2018 22:26:49 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE TASK_1
+OBJECT MODULE PLACED IN .\Objects\Task 1.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Task 1.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Ta
+                    -sk 1.lst) TABS(2) OBJECT(.\Objects\Task 1.obj)
+
+line level    source
+
+   1          #include "reg52.h"    
+   2          
+   3          typedef unsigned int ui;   
+   4          typedef unsigned char uc;
+   5          
+   6          
+   7          
+   8          bit DIR;
+   9          
+  10          ui count,value,t;
+  11          
+  12          
+  13          void timer1()
+  14          {
+  15   1        TMOD|=0X10;
+  16   1      
+  17   1        TH1 = 0xff; 
+  18   1        TL1 = 0xff;   //1us
+  19   1          
+  20   1        ET1=1;
+  21   1        EA=1;
+  22   1        TR1=1;
+  23   1      }
+  24          ui   t=0;
+  25          void main()
+  26          { 
+  27   1        timer1(); 
+  28   1        while(1)
+  29   1        {
+  30   2          if(count>100)             
+  31   2          {  
+  32   3            count=0;
+  33   3            if(DIR==1)           
+  34   3            {
+  35   4              value++;
+  36   4            }     
+  37   3            if(DIR==0)
+  38   3            {
+  39   4              value--;
+  40   4            }
+  41   3              
+  42   3          }
+  43   2      
+  44   2          if(value==1000)
+  45   2          {
+  46   3            DIR=0;
+  47   3          }
+  48   2          if(value==0)
+  49   2          {
+  50   3            DIR=1;
+  51   3          } 
+  52   2      
+  53   2          if(t>1000)  //1000*1us
+  54   2          {
+C51 COMPILER V9.54   TASK_1                                                                12/17/2018 22:26:49 PAGE 2   
+
+  55   3            t=0;
+  56   3          }
+  57   2          if(t <value)  
+  58   2          {
+  59   3            P2=0xff;
+  60   3          }
+  61   2          else
+  62   2          {
+  63   3            P2=0;
+  64   3          }   
+  65   2        }   
+  66   1      }
+  67          
+  68          void ee(void) interrupt 3  
+  69          {
+  70   1        TH1 = 0xff; 
+  71   1        TL1 = 0xff;   //1us
+  72   1        t++; 
+  73   1          count++;
+  74   1        
+  75   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    141    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

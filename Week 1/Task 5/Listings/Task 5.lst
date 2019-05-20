@@ -1,0 +1,120 @@
+C51 COMPILER V9.54   TASK_5                                                                11/23/2018 15:13:22 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE TASK_5
+OBJECT MODULE PLACED IN .\Objects\Task 5.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Task 5.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Ta
+                    -sk 5.lst) TABS(2) OBJECT(.\Objects\Task 5.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<math.h>
+   3          typedef unsigned int ui;
+   4          typedef unsigned char uc;
+   5          sbit led0=P2^0;
+   6          sbit led1=P2^1;
+   7          sbit led2=P2^2;
+   8          sbit led3=P2^3;
+   9          sbit led4=P2^4;
+  10          sbit led5=P2^5;
+  11          sbit led6=P2^6;
+  12          sbit led7=P2^7;
+  13                     static bit t=0;
+  14             static  int i=0,m=0,s=129;
+  15               static int j=0,k=0;
+  16          
+  17          
+  18          int f(int i)
+  19          {
+  20   1         int n=0;
+  21   1        
+  22   1        while(8-i>0) n=pow(2,i)+n,i++;
+  23   1        return n;
+  24   1        
+  25   1      }
+  26          
+  27          
+  28          void timer0()    
+  29          {
+  30   1        TMOD=0X01;
+  31   1        TH0=0XFC;
+  32   1        TL0=0X18;      // 1ms
+  33   1        ET0=1;
+  34   1        EA=1;
+  35   1        TR0=1;  
+  36   1      }
+  37          
+  38          
+  39          void delay(unsigned int i)   //i=1 10us
+  40          {
+  41   1        while(i--);
+  42   1      }
+  43          
+  44          //main function
+  45          void main()
+  46          {
+  47   1      
+  48   1            timer0();
+  49   1           while(i!=3);
+  50   1            EA=0;
+  51   1            P2=0xff;
+  52   1           while(1);
+  53   1        
+  54   1      }
+C51 COMPILER V9.54   TASK_5                                                                11/23/2018 15:13:22 PAGE 2   
+
+  55          
+  56          void exit() interrupt 1
+  57          {
+  58   1      
+  59   1      
+  60   1            TH0=0XFC;
+  61   1             TL0=0X18;  
+  62   1              k++;
+  63   1                  
+  64   1             if (j<=5-2*i&&t==0)
+  65   1             {
+  66   2               j++;
+  67   2               m=pow(2,i);
+  68   2               m=m<<j;
+  69   2               m=m|s;
+  70   2               m=~m;
+  71   2               P2=m;
+  72   2               delay(3000);
+  73   2             }
+  74   1             else 
+  75   1             {
+  76   2               t=1;
+  77   2               j--;
+  78   2               m=pow(2,i);
+  79   2               m=m<<j;
+  80   2               m=m|s;
+  81   2               m=~m;
+  82   2               P2=m;
+  83   2               delay(3000);
+  84   2               if(j<2*i) t=0;
+  85   2               }
+  86   1        
+  87   1               if(k==20)
+  88   1               {
+  89   2                 k=0;
+  90   2                 i++;
+  91   2                 s=pow(2,i)+pow(2,7-i);
+  92   2               }
+  93   1                  
+  94   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    534    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

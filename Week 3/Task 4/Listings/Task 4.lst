@@ -1,0 +1,251 @@
+C51 COMPILER V9.54   TASK_4                                                                12/07/2018 21:34:43 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE TASK_4
+OBJECT MODULE PLACED IN .\Objects\Task 4.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Task 4.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Ta
+                    -sk 4.lst) TABS(2) OBJECT(.\Objects\Task 4.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<math.h>
+   3          #define stop while(1);        //stop   for   debug
+   4          typedef unsigned int ui;
+   5          typedef unsigned char uc;
+   6          sbit led0=P2^0;
+   7          sbit led1=P2^1;
+   8          sbit led2=P2^2;
+   9          sbit led3=P2^3;
+  10          sbit led4=P2^4;
+  11          sbit led5=P2^5;
+  12          sbit led6=P2^6;
+  13          sbit led7=P2^7;
+  14          sbit LSA=P2^2;
+  15          sbit LSB=P2^3;
+  16          sbit LSC=P2^4;
+  17          sbit beep=P1^5;
+  18            char code du[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+  19                                                 0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0};
+  20          
+  21           void delay(unsigned int i)   //i=1 10us
+  22          {
+  23   1        while(i--);
+  24   1      }
+  25          
+  26          void we(char i)   //??0~7
+  27          {
+  28   1        switch(i)
+  29   1        {
+  30   2          case 0:LSA=0,LSB=0,LSC=0;break;
+  31   2          case 1:LSA=1,LSB=0,LSC=0;break;
+  32   2          case 2:LSA=0,LSB=1,LSC=0;break;
+  33   2          case 3:LSA=1,LSB=1,LSC=0;break;
+  34   2          case 4:LSA=0,LSB=0,LSC=1;break;
+  35   2          case 5:LSA=1,LSB=0,LSC=1;break;
+  36   2          case 6:LSA=0,LSB=1,LSC=1;break;
+  37   2          case 7:LSA=1,LSB=1,LSC=1;
+  38   2        }
+  39   1      }
+  40          
+  41          void timer0()    
+  42          {
+  43   1        TMOD=0X01;
+  44   1        TH0=0XFC;
+  45   1        TL0=0X18;      // 1ms
+  46   1        ET0=1;
+  47   1        EA=1;
+  48   1        TR0=1;  
+  49   1      }
+  50          
+  51          void display(char j,int t)
+  52          {
+  53   1        char n[8],i,m=1;
+  54   1        for(i=0;i<j;i++)
+C51 COMPILER V9.54   TASK_4                                                                12/07/2018 21:34:43 PAGE 2   
+
+  55   1        {
+  56   2          n[i]=t%10;
+  57   2          t=t/10;
+  58   2        }
+  59   1        /*  for(i=j;i>0;i--)
+  60   1        { 
+  61   1          if(n[i]==0)   n[i]=16;
+  62   1          if( n[i-1]!=0)   break;
+  63   1        }
+  64   1        for(i=j-1;i>=0;i--)
+  65   1        {
+  66   1           P0=0;
+  67   1          we(i);
+  68   1          m=n[i];
+  69   1          P0=du[m];
+  70   1          delay(1000);
+  71   1          }
+  72   1          */
+  73   1          we(5);
+  74   1          P0=du[n[5]];
+  75   1          delay(500);
+  76   1          P0=0;
+  77   1          we(4);
+  78   1          P0=du[n[4]];
+  79   1          delay(500);
+  80   1          P0=0;
+  81   1          we(1);
+  82   1          P0=du[n[1]];
+  83   1          delay(500);
+  84   1          P0=0;
+  85   1          we(0);
+  86   1          P0=du[n[0]];
+  87   1          delay(500);
+  88   1          P0=0;
+  89   1      }
+  90          uc keynum;
+  91          int key()       //key()
+  92          {
+  93   1        char a=0;
+  94   1      
+  95   1        P1=0x0f;
+  96   1        if(P1!=0x0f)
+  97   1        {
+  98   2          delay(1000);
+  99   2          if(P1!=0x0f)
+ 100   2          { 
+ 101   3            
+ 102   3            P1=0X0F;
+ 103   3            switch(P1)
+ 104   3            {
+ 105   4              case(0X07): keynum=0;break;
+ 106   4              case(0X0b): keynum=1;break;
+ 107   4              case(0X0d): keynum=2;break;
+ 108   4              case(0X0e): keynum=3;break;
+ 109   4            }
+ 110   3            
+ 111   3            P1=0XF0;
+ 112   3            switch(P1)
+ 113   3            {
+ 114   4              case(0X70):  keynum=keynum;break;
+ 115   4              case(0Xb0): keynum=keynum+4;break;
+ 116   4              case(0Xd0):  keynum=keynum+8;break;
+C51 COMPILER V9.54   TASK_4                                                                12/07/2018 21:34:43 PAGE 3   
+
+ 117   4              case(0Xe0): keynum=keynum+12;break;
+ 118   4            }
+ 119   3            while((a<50)&&(P1!=0xf0))  
+ 120   3            {
+ 121   4              delay(1000);
+ 122   4              a++;
+ 123   4            } 
+ 124   3            return keynum;
+ 125   3             
+ 126   3          }
+ 127   2          else return -1;
+ 128   2        }
+ 129   1          else return -1;
+ 130   1      }
+ 131           ui t=0,q=-1,q1,q2,q3,u=1;  
+ 132          ui z=0;
+ 133           //static
+ 134          void    see(ui t)
+ 135          {
+ 136   1          we(5);
+ 137   1          P0=du[t/60/10];
+ 138   1          delay(100);
+ 139   1          P0=0;
+ 140   1          we(4);
+ 141   1          P0=du[t/60%10];
+ 142   1          delay(100);
+ 143   1          P0=0;
+ 144   1          we(1);
+ 145   1          P0=du[t%60/10];
+ 146   1          delay(100);
+ 147   1          P0=0;
+ 148   1          we(0);
+ 149   1          P0=du[t%60%10];
+ 150   1          delay(100);
+ 151   1          P0=0;
+ 152   1      } 
+ 153          bit flag=1;
+ 154          void main()
+ 155          {
+ 156   1      
+ 157   1            A:;
+ 158   1      
+ 159   1           while(key()==-1);
+ 160   1           if(keynum!=12)
+ 161   1           goto A;
+ 162   1        
+ 163   1           timer0();   
+ 164   1      
+ 165   1           while(1) 
+ 166   1           {
+ 167   2                 
+ 168   2                if(key()==13)   flag=~flag;
+ 169   2                 see(t);
+ 170   2          
+ 171   2             if(keynum==14)  
+ 172   2             {
+ 173   3                 EA=0;
+ 174   3                 z=0;
+ 175   3                 t=0;
+ 176   3                 goto A;
+ 177   3             }
+ 178   2          
+C51 COMPILER V9.54   TASK_4                                                                12/07/2018 21:34:43 PAGE 4   
+
+ 179   2              if(keynum==15)
+ 180   2            {
+ 181   3               u=0;
+ 182   3                we(0);
+ 183   3                P0=du[0];
+ 184   3               
+ 185   3                while(key()==-1||key()>9); 
+ 186   3              
+ 187   3                while(key()==-1||key()>9)  see(q1=keynum*600);delay(1000);
+ 188   3                  
+ 189   3                while(key()==-1||key()>9)  see(q2=q1+keynum*60);delay(1000);
+ 190   3            
+ 191   3                while(key()==-1||key()>9)  see(q3=q2+keynum*10);delay(1000);
+ 192   3           
+ 193   3                while(key()==-1||key()>9)  see(q=q3+keynum);
+ 194   3                 u=1;
+ 195   3               
+ 196   3                 keynum=-1;      
+ 197   3            }
+ 198   2            
+ 199   2            }
+ 200   1           
+ 201   1          
+ 202   1      }
+ 203          
+ 204          void exit() interrupt 1
+ 205          {
+ 206   1           
+ 207   1            TH0=0XFC;
+ 208   1            TL0=0X18;  
+ 209   1            z++;      
+ 210   1            if(z==1000)
+ 211   1            {
+ 212   2                z=0;
+ 213   2                    
+ 214   2                
+ 215   2                   if(flag&&u) t++;
+ 216   2                   
+ 217   2                if(t==3600)  t=0;       
+ 218   2            } 
+ 219   1            if(q==t)  q=-2;
+ 220   1            if(q==-2)   beep=~beep,delay(50);
+ 221   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1023    ----
+   CONSTANT SIZE    =     17    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     15      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

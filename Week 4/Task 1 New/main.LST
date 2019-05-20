@@ -1,0 +1,104 @@
+C51 COMPILER V9.54   MAIN                                                                  12/15/2018 19:46:05 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          
+   2          
+   3          #include "reg52.h"      
+   4          
+   5          typedef unsigned int u16;   
+   6          typedef unsigned char u8;
+   7          
+   8          
+   9          sbit PWM=P2^1;
+  10          bit DIR;
+  11          
+  12          
+  13          u16 count,value,timer1;
+  14          
+  15          void Timer1Init()
+  16          {
+  17   1        TMOD|=0X10;
+  18   1      
+  19   1        TH1 = 0xFF; 
+  20   1        TL1 = 0xff;   //1us
+  21   1          
+  22   1        ET1=1;
+  23   1        EA=1;
+  24   1        TR1=1;
+  25   1      }
+  26          
+  27          void main()
+  28          { 
+  29   1        Timer1Init();  
+  30   1        while(1)
+  31   1        {
+  32   2          if(count>100)             
+  33   2          {  
+  34   3            count=0;
+  35   3            if(DIR==1)        
+  36   3            {
+  37   4              value++;
+  38   4            }     
+  39   3            if(DIR==0)
+  40   3            {
+  41   4              value--;
+  42   4            }
+  43   3              
+  44   3          }
+  45   2      
+  46   2          if(value==1000)
+  47   2          {
+  48   3            DIR=0;
+  49   3          }
+  50   2          if(value==0)
+  51   2          {
+  52   3            DIR=1;
+  53   3          } 
+  54   2              
+  55   2          if(timer1>1000) 
+C51 COMPILER V9.54   MAIN                                                                  12/15/2018 19:46:05 PAGE 2   
+
+  56   2          {
+  57   3            timer1=0;
+  58   3          }
+  59   2          if(timer1 <value) 
+  60   2          {
+  61   3            PWM=1;
+  62   3          }
+  63   2          else
+  64   2          {
+  65   3            PWM=0;
+  66   3          }   
+  67   2        }   
+  68   1      }
+  69          
+  70          
+  71          void Time1(void) interrupt 3    
+  72          {
+  73   1        TH1 = 0xFF; 
+  74   1        TL1 = 0xff;   //1us
+  75   1        timer1++; 
+  76   1          count++;
+  77   1        
+  78   1      }
+  79          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    139    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

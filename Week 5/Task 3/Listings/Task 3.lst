@@ -1,0 +1,298 @@
+C51 COMPILER V9.54   TASK_3                                                                12/15/2018 19:28:03 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE TASK_3
+OBJECT MODULE PLACED IN .\Objects\Task 3.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Task 3.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\Task 3.lst) TABS(2) OBJECT(.\Objects\Task 3.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <math.h>
+   3          #include <intrins.h>
+   4          #define stop while(1);        //stop   for   debug
+   5          typedef unsigned int ui;
+   6          typedef unsigned char uc;
+   7          sbit A=P1^0;
+   8          sbit k3=P3^2;
+   9          sbit k4=P3^3;
+  10          sbit led0=P2^0;
+  11          sbit led1=P2^1;
+  12          sbit led2=P2^2;
+  13          sbit led3=P2^3;
+  14          sbit led4=P2^4;
+  15          sbit led5=P2^5;
+  16          sbit led6=P2^6;
+  17          sbit led7=P2^7;
+  18          sbit LSA=P2^2;
+  19          sbit LSB=P2^3;
+  20          sbit LSC=P2^4;
+  21          sbit beep=P1^5;
+  22          uc  code du[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+  23                                                 0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0};
+  24          uc  code beat[8]={0xe,0xc,0xd,0x9,0xb,0x3,0x7,0x6};
+  25           void delay(unsigned int i)   //i=1 10us
+  26          {
+  27   1        while(i--);
+  28   1      }
+  29          
+  30          void we(char i)   //??0~7
+  31          {
+  32   1        switch(i)
+  33   1        {
+  34   2          case 0:LSA=0,LSB=0,LSC=0;break;
+  35   2          case 1:LSA=1,LSB=0,LSC=0;break;
+  36   2          case 2:LSA=0,LSB=1,LSC=0;break;
+  37   2          case 3:LSA=1,LSB=1,LSC=0;break;
+  38   2          case 4:LSA=0,LSB=0,LSC=1;break;
+  39   2          case 5:LSA=1,LSB=0,LSC=1;break;
+  40   2          case 6:LSA=0,LSB=1,LSC=1;break;
+  41   2          case 7:LSA=1,LSB=1,LSC=1;
+  42   2        }
+  43   1      }
+  44          ui th1,tl1;
+  45          void timer0(ui t)    //    t      t  ms
+  46          {
+  47   1        TMOD=0X01;
+  48   1        TH0=(65536-1000*t)/256;
+  49   1        TL0=(65536-1000*t)%256;
+  50   1        ET0=1;
+  51   1        EA=1;
+  52   1        TR0=1;  
+  53   1      }
+  54          
+C51 COMPILER V9.54   TASK_3                                                                12/15/2018 19:28:03 PAGE 2   
+
+  55          void timer1(ui t)      //  t    ms
+  56          {
+  57   1          ui k;
+  58   1          k=11059200/12;
+  59   1          k=(k*t)/1000;
+  60   1          k=65536-k+12;         //12     for    compensation
+  61   1          th1=(uc)(k>>8);
+  62   1          tl1=(uc)k;
+  63   1          TMOD=1;
+  64   1          TH1=th1;
+  65   1          TL1=tl1;
+  66   1          ET1=1;
+  67   1          TR1=1;
+  68   1          EA=1;
+  69   1      }
+  70          
+  71          void uart ()
+  72          {
+  73   1         TMOD=0x20;
+  74   1        PCON=0X80;      //波特率加倍
+  75   1        TH1=0XF3;       //计数器初始值设置，注意波特率是4800的
+  76   1        TL1=0XF3;
+  77   1         TR1=1;
+  78   1         SCON=0x50;
+  79   1         EA=1;
+  80   1         ES=1;
+  81   1      }
+  82          void display(uc j,ui t)
+  83          {
+  84   1        char n[8],i,m=1;
+  85   1        for(i=0;i<j;i++)
+  86   1        {
+  87   2          n[i]=t%10;
+  88   2          t=t/10;
+  89   2        }
+  90   1        for(i=j;i>0;i--)
+  91   1        { 
+  92   2          if(n[i]==0)   n[i]=16;
+  93   2          if( n[i-1]!=0)   break;
+  94   2        }
+  95   1        for(i=j-1;i>=0;i--)
+  96   1        {
+  97   2           P0=0;
+  98   2          we(i);
+  99   2          m=n[i];
+ 100   2          P0=du[m];
+ 101   2          delay(1000);
+ 102   2          }
+ 103   1      
+ 104   1        /*  we(5);
+ 105   1          P0=du[n[5]];
+ 106   1          delay(500);
+ 107   1          P0=0;
+ 108   1          we(4);
+ 109   1          P0=du[n[4]];
+ 110   1          delay(500);
+ 111   1          P0=0;
+ 112   1          we(1);
+ 113   1          P0=du[n[1]];
+ 114   1          delay(500);
+ 115   1          P0=0;
+ 116   1          we(0);
+C51 COMPILER V9.54   TASK_3                                                                12/15/2018 19:28:03 PAGE 3   
+
+ 117   1          P0=du[n[0]];
+ 118   1          delay(500);
+ 119   1          P0=0;
+ 120   1          */
+ 121   1      }
+ 122             bit keysta;
+ 123             uc keynum;
+ 124          int key()       //key()
+ 125          {
+ 126   1        char a=0;
+ 127   1        P1=0x0f;
+ 128   1        if(P1!=0x0f)
+ 129   1        {
+ 130   2          delay(1000);
+ 131   2          if(P1!=0x0f)
+ 132   2          { 
+ 133   3            keysta=1;
+ 134   3            P1=0X0F;
+ 135   3            switch(P1)
+ 136   3            {
+ 137   4              case(0X07): keynum=0;break;
+ 138   4              case(0X0b): keynum=1;break;
+ 139   4              case(0X0d): keynum=2;break;
+ 140   4              case(0X0e): keynum=3;break;
+ 141   4            }
+ 142   3            
+ 143   3            P1=0XF0;
+ 144   3            switch(P1)
+ 145   3            {
+ 146   4              case(0X70):  keynum=keynum;break;
+ 147   4              case(0Xb0): keynum=keynum+4;break;
+ 148   4              case(0Xd0):  keynum=keynum+8;break;
+ 149   4              case(0Xe0): keynum=keynum+12;break;
+ 150   4            }
+ 151   3            while((a<50)&&(P1!=0xf0))  
+ 152   3            {
+ 153   4              delay(1000);
+ 154   4              a++;
+ 155   4            } 
+ 156   3            return keynum;
+ 157   3             
+ 158   3          }
+ 159   2          else return -1;
+ 160   2        }
+ 161   1          else return -1;
+ 162   1          }
+ 163               ui t=0;
+ 164               unsigned char tmp;
+ 165          uc   data1 = 0;
+ 166          unsigned int  num1 = 0,num2 = 0,fu = 0;
+ 167          float num3=0;
+ 168          uc q[6] = {0};
+ 169          bit  flag = 0;
+ 170          int a = 0;
+ 171          int c = 0; 
+ 172          void send_char(uc txd);
+ 173          void send(float  u);
+ 174          void main()
+ 175          {
+ 176   1          uart();
+ 177   1        while(1)
+ 178   1        {
+C51 COMPILER V9.54   TASK_3                                                                12/15/2018 19:28:03 PAGE 4   
+
+ 179   2          if(RI == 1)         
+ 180   2          {
+ 181   3               RI = 0;    
+ 182   3              data1 = SBUF; 
+ 183   3            if(( data1>='0') && (data1<='9'))                                                                      
+             -                                                                                                                        
+             -                                                                                                                        
+             -                                                                                                                        
+             -                                                                                                                        
+             -                                                                                     
+ 184   3            {
+ 185   4              num1 = 10*num1+(data1 -'0');
+ 186   4            }     
+ 187   3            else if(data1 == '+'||data1 =='-'||data1 == '*'|| data1 == '/')
+ 188   3              {
+ 189   4                fu = data1;
+ 190   4                num2 = num1;
+ 191   4                num1 = 0;
+ 192   4              }     
+ 193   3              else if(data1 == '='&&fu == '+')
+ 194   3              {
+ 195   4                num3 = num1+num2*1.0;
+ 196   4                flag = 1;
+ 197   4                
+ 198   4              }
+ 199   3              else if(data1 == '='&&fu == '-')
+ 200   3              {
+ 201   4                num3 = num2-num1*1.0;
+ 202   4                flag = 1;
+ 203   4              }
+ 204   3              else if(data1 == '='&&fu == '*')
+ 205   3              {
+ 206   4                num3 = num1*(num2*1.0);
+ 207   4                flag = 1;
+ 208   4              }
+ 209   3              else if(data1 == '='&&fu == '/')
+ 210   3              {
+ 211   4                num3 = num1/(num2*1.0);
+ 212   4                flag = 1;
+ 213   4              }
+ 214   3            
+ 215   3            
+ 216   3            if(flag == 1)
+ 217   3            {
+ 218   4              send(num3);
+ 219   4              num1=0;
+ 220   4              num2=0;
+ 221   4              num3=0;
+ 222   4              flag = 0;
+ 223   4            }
+ 224   3          }   
+ 225   2        }
+ 226   1      }
+ 227          void send_char(uc txd)
+ 228          
+ 229          {
+ 230   1        P2=txd;
+ 231   1        delay(1e10);
+ 232   1        SBUF = txd;
+ 233   1        
+ 234   1        while(!TI);       
+ 235   1        TI = 0;       
+C51 COMPILER V9.54   TASK_3                                                                12/15/2018 19:28:03 PAGE 5   
+
+ 236   1        
+ 237   1      }
+ 238          
+ 239          void send(float u)
+ 240          {
+ 241   1        ui v;
+ 242   1        uc i = 0;
+ 243   1        v=u*100+0.5;
+ 244   1        while(v>0)
+ 245   1        {
+ 246   2          c = v%10;
+ 247   2          if(i==2)  
+ 248   2          {
+ 249   3               q[i]='.';
+ 250   3               i++;
+ 251   3          }
+ 252   2          q[i] = c + '0';
+ 253   2          v = v/10;
+ 254   2          i++;
+ 255   2        }
+ 256   1        while(i+1)
+ 257   1        {
+ 258   2          send_char(q[i]);
+ 259   2          i--;
+ 260   2        }
+ 261   1        }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1309    ----
+   CONSTANT SIZE    =     25    ----
+   XDATA SIZE       =     29      19
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
